@@ -5,16 +5,50 @@ import { TabsContent, TabsTrigger } from "@radix-ui/react-tabs";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { apiClient } from "@/lib/api-client";
+import { SIGNUP_ROUTES } from "@/lib/contants";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleLogin = async () => {}
+  const validateSignup = () => {
+    if (!email.length) {
+      toast.error("Email is required");
+      return false;
+    }
+    if (!password.length) {
+      toast.error("Password is required");
+      return false;
+    }
+    if (password !== confirmPassword) {
+      toast.error("Password and Confirm Password should be same");
+      return false;
+    }
+    return true;
+  };
 
-  const handleSignup = async () => {}
-  
+  const handleLogin = async () => {};
+
+  const handleSignup = async () => {
+    if (validateSignup()) {
+      try {
+        const response = await apiClient.post(
+          SIGNUP_ROUTES,
+          {
+            email,
+            password,
+          },
+          console.log({response})
+        );
+      } catch (error) {
+        console.log("Error", error);
+      }
+    }
+  };
+
   return (
     <div className="h-[100vh] w-[100vw] flex items-center justify-center">
       <div className="h-[80vh] bg-white  border-2 border-white  text-opacity-90 shadow-2xl w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-3xl grid xl:grid-cols-2">
@@ -65,7 +99,7 @@ const Auth = () => {
                 </Button>
               </TabsContent>
               <TabsContent className="flex flex-col gap-5" value="signup">
-              <Input
+                <Input
                   placeholder="Email"
                   type="email"
                   className="rounded-full p-6"
@@ -96,7 +130,6 @@ const Auth = () => {
         <div className="hidden xl:flex justify-center items-center ">
           <img src={Background} className="h-[700px] " />
         </div>
-
       </div>
     </div>
   );

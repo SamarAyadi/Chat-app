@@ -85,12 +85,12 @@ const Profile = () => {
       formData.append("profile-image", file);
       const response = await apiClient.post(ADD_PROFILE_IMAGE_ROUTE, formData, {withCredentials: true});
       if (response.status === 200 && response.data.image) {
-        setUserInfo({ ...userInfo, image: response.data.image });
+        setUserInfo({ ...userInfo, image: response.data.image }); // The setUserInfo function updates the user's information with new image
         toast.success("Image update Successfully")
       }
     }
   };
-
+//   response.data.image => Ensure the server returns the new image path in the response.data.image
   const handleDeleteImage = async () => {};
 
   return (
